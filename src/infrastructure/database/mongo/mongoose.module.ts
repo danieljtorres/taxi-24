@@ -4,6 +4,12 @@ import { EnvService } from '@Infrastructure/env/env.service';
 import { CONFIG_PROVIDER } from '@Infrastructure/env';
 import { createMongooseOptions } from './config';
 
+//Schemas
+import { Trip, TripSchema } from './schemas/trip.schema';
+import { Driver, DriverSchema } from './schemas/driver.schema';
+import { Invoice, InvoiceSchema } from './schemas/invoice.schema';
+import { Passenger, PassengerSchema } from './schemas/passenger.schema';
+
 @Module({
   imports: [
     MongooseModuleLib.forRootAsync({
@@ -12,7 +18,12 @@ import { createMongooseOptions } from './config';
       },
       inject: [CONFIG_PROVIDER],
     }),
-    MongooseModuleLib.forFeature([]),
+    MongooseModuleLib.forFeature([
+      { name: Trip.name, schema: TripSchema },
+      { name: Driver.name, schema: DriverSchema },
+      { name: Invoice.name, schema: InvoiceSchema },
+      { name: Passenger.name, schema: PassengerSchema },
+    ]),
   ],
 })
 export class MongooseModule {}
