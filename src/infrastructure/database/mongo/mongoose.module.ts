@@ -10,6 +10,8 @@ import { Driver, DriverSchema } from './schemas/driver.schema';
 import { Invoice, InvoiceSchema } from './schemas/invoice.schema';
 import { Passenger, PassengerSchema } from './schemas/passenger.schema';
 
+import { SeedsCommand } from './seeds';
+
 @Module({
   imports: [
     MongooseModuleLib.forRootAsync({
@@ -25,5 +27,7 @@ import { Passenger, PassengerSchema } from './schemas/passenger.schema';
       { name: Passenger.name, schema: PassengerSchema },
     ]),
   ],
+  providers: [SeedsCommand],
+  exports: [SeedsCommand],
 })
 export class MongooseModule {}
