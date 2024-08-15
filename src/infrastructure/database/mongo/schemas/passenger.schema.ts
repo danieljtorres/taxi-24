@@ -22,3 +22,7 @@ PassengerSchema.virtual('trips', {
   foreignField: 'passsenger',
   justOne: false,
 });
+
+PassengerSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});

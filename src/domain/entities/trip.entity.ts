@@ -15,6 +15,7 @@ export interface Point {
 }
 
 export interface Trip {
+  id?: string;
   origin: Point;
   destination: Point;
   status: TripStatus;

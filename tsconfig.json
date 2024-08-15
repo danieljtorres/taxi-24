@@ -41,6 +41,12 @@
       ],
       "@Presentation/*": [
         "src/presentation/*"
+      ],
+      "@Utils": [
+        "src/utils"
+      ],
+      "@Utils/*": [
+        "src/utils/*"
       ]
     }
   }

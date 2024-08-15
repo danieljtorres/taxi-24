@@ -40,3 +40,7 @@ TripSchema.virtual('invoice', {
   foreignField: 'trip',
   justOne: true,
 });
+
+TripSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});

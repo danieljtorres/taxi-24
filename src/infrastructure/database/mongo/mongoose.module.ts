@@ -10,7 +10,12 @@ import { Driver, DriverSchema } from './schemas/driver.schema';
 import { Invoice, InvoiceSchema } from './schemas/invoice.schema';
 import { Passenger, PassengerSchema } from './schemas/passenger.schema';
 
+//Repositories
+import { DriverRepository } from '@Application/repositories/driver.repository';
+
+import { MongooseDriverRepository } from './repositories/driver.repository';
 import { SeedsCommand } from './seeds';
+import { MongooseDriverMapper } from './mappers/driver.mapper';
 
 @Module({
   imports: [
@@ -27,7 +32,14 @@ import { SeedsCommand } from './seeds';
       { name: Passenger.name, schema: PassengerSchema },
     ]),
   ],
-  providers: [SeedsCommand],
-  exports: [SeedsCommand],
+  providers: [
+    {
+      provide: DriverRepository,
+      useClass: MongooseDriverRepository,
+    },
+    SeedsCommand,
+    MongooseDriverMapper,
+  ],
+  exports: [DriverRepository, SeedsCommand],
 })
 export class MongooseModule {}

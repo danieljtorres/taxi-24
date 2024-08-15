@@ -47,11 +47,6 @@ export class WinstonLogger implements LoggerService {
     if (!this.logger) throw new Error('Logger is not created');
   }
 
-  public log(message: any, ...optionalParams: [...any, string?]): void {
-    const context = optionalParams.pop();
-    this.logger.log(message, { context, ...optionalParams[0] });
-  }
-
   public info(message: any, ...optionalParams: [...any, string?]): void {
     const context = optionalParams.pop();
     this.logger.info(message, { context, ...optionalParams[0] });

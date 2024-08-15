@@ -25,3 +25,7 @@ export class Invoice implements InvoiceEntity {
 }
 
 export const InvoiceSchema = SchemaFactory.createForClass(Invoice);
+
+InvoiceSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});

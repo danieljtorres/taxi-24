@@ -28,3 +28,7 @@ DriverSchema.virtual('trips', {
   foreignField: 'driver',
   justOne: false,
 });
+
+DriverSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});
