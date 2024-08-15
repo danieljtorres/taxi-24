@@ -15,7 +15,7 @@ export class Driver implements DriverEntity {
   @Prop()
   name: string;
 
-  @Prop({})
+  @Prop()
   @Type(() => Point)
   actualLocation: Point;
 }
