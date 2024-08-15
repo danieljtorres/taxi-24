@@ -10,7 +10,7 @@ export enum TripStatus {
 }
 
 export interface Point {
-  type: string;
+  type?: string;
   coordinates: number[];
 }
 
