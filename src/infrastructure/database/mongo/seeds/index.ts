@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Passenger } from '../schemas/passenger.schema';
 import { faker } from '@faker-js/faker';
+import { Trip } from '../schemas/trip.schema';
 
 @Command({
   name: 'seed-data',
@@ -14,6 +15,7 @@ export class SeedsCommand extends CommandRunner {
   constructor(
     @InjectModel(Driver.name) private driverModel: Model<Driver>,
     @InjectModel(Passenger.name) private passengerModel: Model<Passenger>,
+    @InjectModel(Trip.name) private tripModel: Model<Trip>,
   ) {
     super();
   }
@@ -27,15 +29,13 @@ export class SeedsCommand extends CommandRunner {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (i): Driver => ({
           name: faker.person.fullName(),
-          actualLocation: {
-            coordinates: [
-              faker.location.latitude(),
-              faker.location.longitude(),
-            ],
-          },
+          actualLocation: [
+            faker.location.latitude(),
+            faker.location.longitude(),
+          ],
         }),
       );
-      await this.seedData(this.driverModel, seedDrivers);
+      const driversCreated = await this.seedData(this.driverModel, seedDrivers);
 
       //Faker data
       const seedPassengers = [...Array(10).keys()].map(
@@ -44,7 +44,19 @@ export class SeedsCommand extends CommandRunner {
           name: faker.person.fullName(),
         }),
       );
-      await this.seedData(this.passengerModel, seedPassengers);
+      const passengersCreated = await this.seedData(
+        this.passengerModel,
+        seedPassengers,
+      );
+
+      await this.seedData(this.tripModel, [
+        {
+          origin: [faker.location.latitude(), faker.location.longitude()],
+          destination: [faker.location.latitude(), faker.location.longitude()],
+          passenger: passengersCreated[0]._id,
+          driver: driversCreated[0]._id,
+        },
+      ] as Trip[]);
     } catch (error) {
       console.log(error);
     }
@@ -63,5 +75,7 @@ export class SeedsCommand extends CommandRunner {
     const created = await model.insertMany(data);
 
     console.log(`${created.length} ${model.name} inserted to the collection`);
+
+    return created;
   }
 }

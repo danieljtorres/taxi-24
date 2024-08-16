@@ -1,7 +1,10 @@
-import { Point, Trip } from './trip.entity';
+import { Trip } from './trip.entity';
 
 export interface Driver {
+  id?: string;
   name: string;
-  actualLocation: Point;
+  actualLocation: number[];
   trips?: null | Trip[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }

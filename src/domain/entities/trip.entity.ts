@@ -9,14 +9,10 @@ export enum TripStatus {
   'COMPLETED' = 4,
 }
 
-export interface Point {
-  type?: string;
-  coordinates: number[];
-}
-
 export interface Trip {
-  origin: Point;
-  destination: Point;
+  id?: string;
+  origin: number[];
+  destination: number[];
   status: TripStatus;
   passenger: string | Passenger;
   driver: string | Driver;
