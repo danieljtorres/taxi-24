@@ -10,8 +10,12 @@ export interface Pagination {
 }
 
 export interface PaginationResult<TData> {
-  items: TData[];
+  result: TData[];
   page: number;
   totalPages: number;
   totalItems: number;
+}
+
+export interface Result<TData> {
+  result: TData;
 }
