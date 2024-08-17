@@ -53,12 +53,16 @@ export class TripComplete {
     const tripAccepted = await this.tripRepository.complete(id);
 
     //Create Invoice for trip
+    const totalDistance = getDistance(trip.origin, trip.destination);
+
     const amount = Math.ceil(
       getDistance(trip.origin, trip.destination) * RATE_PER_KM,
     );
 
     const invoice = await this.invoiceRepository.create({
       amount,
+      totalDistance,
+      rate: RATE_PER_KM,
       trip: trip.id,
     });
 

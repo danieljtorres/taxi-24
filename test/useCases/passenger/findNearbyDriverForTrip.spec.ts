@@ -4,8 +4,10 @@ import { DriverRepository } from '@Application/repositories/driver.repository';
 import { PassengerRepository } from '@Application/repositories/passenger.repository';
 import { TripRepository } from '@Application/repositories/trip.repository';
 import { PassengerFindNearbyDriverForTrip } from '@Application/userCases/passenger/findNearbyDriverForTrip';
+import { TripStatus } from '@Domain/entities/trip.entity';
 import { faker } from '@faker-js/faker';
 import { MIN_NEARBY_DRIVERS } from '@Utils/constants';
+import { getDistance } from '@Utils/geo';
 
 describe('PassengerFindNearbyDriverForTrip', () => {
   let findNearbyDriverForTrip: PassengerFindNearbyDriverForTrip;
@@ -81,6 +83,7 @@ describe('PassengerFindNearbyDriverForTrip', () => {
     } as any);
     mockTripRepository.findById.mockResolvedValue({
       id: tripId,
+      status: TripStatus.REQUESTED,
       passenger: 'otherPassengerId',
     } as any);
 
@@ -96,9 +99,18 @@ describe('PassengerFindNearbyDriverForTrip', () => {
   it('should return nearby drivers when all validations pass', async () => {
     const passengerId = 'passenger-id';
     const tripId = 'trip-id';
+
+    const location = { latitude: 1, longitude: 1 };
+
     const drivers = [
-      { id: faker.database.mongodbObjectId() },
-      { id: faker.database.mongodbObjectId() },
+      {
+        id: faker.database.mongodbObjectId(),
+        actualLocation: location,
+      },
+      {
+        id: faker.database.mongodbObjectId(),
+        actualLocation: location,
+      },
     ];
 
     mockPassengerRepository.findById.mockResolvedValue({
@@ -106,17 +118,25 @@ describe('PassengerFindNearbyDriverForTrip', () => {
     } as any);
     mockTripRepository.findById.mockResolvedValue({
       id: tripId,
+      status: TripStatus.REQUESTED,
       passenger: passengerId,
-      origin: [1, 1],
+      origin: location,
     } as any);
     mockDriverRepository.findAvailablesNearby.mockResolvedValue(drivers as any);
 
     const result = await findNearbyDriverForTrip.execute(passengerId, tripId);
 
     expect(mockDriverRepository.findAvailablesNearby).toHaveBeenCalledWith(
-      [1, 1],
+      { latitude: 1, longitude: 1 },
       MIN_NEARBY_DRIVERS,
     );
-    expect(result).toEqual({ result: drivers });
+    expect(result).toEqual({
+      result: drivers.map((driver) => {
+        return {
+          distance: getDistance(location, driver.actualLocation),
+          ...driver,
+        };
+      }),
+    });
   });
 });

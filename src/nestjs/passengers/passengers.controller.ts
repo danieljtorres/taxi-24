@@ -59,6 +59,25 @@ export class PassengersController {
     return await this.findByIdUseCase.execute(id);
   }
 
+  @Post(':id/trip')
+  @ApiParam({
+    name: 'id',
+    type: String,
+  })
+  @ApiBody({ type: RequestTripDTO })
+  @ApiOperation({
+    description: 'Post data to request a trip for passenger',
+  })
+  // @ApiOkResponse({
+  //   type: ResultPresenter<TripPresenter>,
+  // })
+  async requestTrip(
+    @Param('id', IsObjectIdPipe) id: string,
+    @Body() data: RequestTripDTO,
+  ) {
+    return await this.requestTripUseCase.execute(id, data);
+  }
+
   @Get(':id/trip/:tripId/nearby-drivers')
   @ApiParam({
     name: 'id',
@@ -79,24 +98,5 @@ export class PassengersController {
     @Param('tripId', IsObjectIdPipe) tripId: string,
   ) {
     return await this.getNearbyDriverByTripUseCase.execute(id, tripId);
-  }
-
-  @Post(':id/trip')
-  @ApiParam({
-    name: 'id',
-    type: String,
-  })
-  @ApiBody({ type: RequestTripDTO })
-  @ApiOperation({
-    description: 'Post data to request a trip for passenger',
-  })
-  // @ApiOkResponse({
-  //   type: ResultPresenter<TripPresenter>,
-  // })
-  async requestTrip(
-    @Param('id', IsObjectIdPipe) id: string,
-    @Body() data: RequestTripDTO,
-  ) {
-    return await this.requestTripUseCase.execute(id, data);
   }
 }

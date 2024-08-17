@@ -37,7 +37,7 @@ export class MongooseDriverRepository
         },
       },
       {
-        $match: { trips: { $gt: { $size: 0 } } },
+        $match: { trips: { $size: 0 } },
       },
       {
         $project: {
@@ -47,7 +47,7 @@ export class MongooseDriverRepository
     ];
 
     return (await this.driverModel.aggregate(aggregation)).map((doc) =>
-      this.model.hydrate(doc),
+      this.model.hydrate(doc).toJSON(),
     );
   }
 
@@ -74,7 +74,7 @@ export class MongooseDriverRepository
         },
       },
       {
-        $match: { trips: { $gt: { $size: 0 } } },
+        $match: { trips: { $size: 0 } },
       },
     ];
 
@@ -90,7 +90,7 @@ export class MongooseDriverRepository
           getDistance(a.actualLocation, location) -
           getDistance(b.actualLocation, location),
       )
-      .map((doc) => this.model.hydrate(doc));
+      .map((doc) => this.model.hydrate(doc).toJSON());
 
     if (limit) return filteredDrivers.slice(0, limit);
 

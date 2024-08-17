@@ -3,7 +3,9 @@ import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
 import { PassengerRepository } from '@Application/repositories/passenger.repository';
 import { TripRepository } from '@Application/repositories/trip.repository';
+import { TripStatus } from '@Domain/entities/trip.entity';
 import { MIN_NEARBY_DRIVERS } from '@Utils/constants';
+import { getDistance } from '@Utils/geo';
 
 export class PassengerFindNearbyDriverForTrip {
   constructor(
@@ -35,6 +37,11 @@ export class PassengerFindNearbyDriverForTrip {
         message: `Trip with id: ${tripId} not found`,
       });
 
+    if (trip.status !== TripStatus.REQUESTED)
+      throw this.exceptions.BadRequestException({
+        message: `Trip with id: ${tripId} has been accepted`,
+      });
+
     if (String(trip.passenger) !== id)
       throw this.exceptions.BadRequestException({
         message: `Trip with id: ${tripId} does not belong to passenger with id: ${id}`,
@@ -45,6 +52,13 @@ export class PassengerFindNearbyDriverForTrip {
       MIN_NEARBY_DRIVERS,
     );
 
-    return { result: drivers };
+    return {
+      result: drivers.map((driver) => {
+        return {
+          distance: getDistance(trip.origin, driver.actualLocation),
+          ...driver,
+        };
+      }),
+    };
   }
 }

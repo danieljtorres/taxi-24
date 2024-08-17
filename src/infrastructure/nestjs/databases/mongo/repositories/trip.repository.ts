@@ -20,51 +20,62 @@ export class MongooseTripRepository
       .find({
         status: TripStatus.ACCEPT,
       })
-      .populate('passenger', 'driver');
+      .populate('passenger', 'driver')
+      .lean();
   }
 
   async findByDriver(driverId: string, status: TripStatus[]): Promise<Trip[]> {
-    return this.tripModel.find({
-      passenger: driverId,
-      status: { $in: status },
-    });
+    return await this.tripModel
+      .find({
+        passenger: driverId,
+        status: { $in: status },
+      })
+      .lean();
   }
 
   async findByPassenger(
     passengerId: string,
     status: TripStatus[],
   ): Promise<Trip[]> {
-    return this.tripModel.find({
-      passenger: passengerId,
-      status: { $in: status },
-    });
+    return await this.tripModel
+      .find({
+        passenger: passengerId,
+        status: { $in: status },
+      })
+      .lean();
   }
 
   async request(passengerId: string, body: RequestTrip): Promise<Trip> {
-    return this.tripModel.create({
-      passenger: passengerId,
-      ...body,
-    });
+    return (
+      await this.tripModel.create({
+        passenger: passengerId,
+        ...body,
+      })
+    ).toJSON();
   }
 
   async assign(id: string, driverId: string): Promise<Trip> {
-    return this.tripModel.findOneAndUpdate(
-      { _id: id },
-      {
-        driver: driverId,
-        status: TripStatus.ACCEPT,
-      },
-      { new: true },
-    );
+    return await this.tripModel
+      .findOneAndUpdate(
+        { _id: id },
+        {
+          driver: driverId,
+          status: TripStatus.ACCEPT,
+        },
+        { new: true },
+      )
+      .lean();
   }
 
   async complete(id: string): Promise<Trip> {
-    return this.tripModel.findOneAndUpdate(
-      { _id: id },
-      {
-        status: TripStatus.COMPLETED,
-      },
-      { new: true },
-    );
+    return await this.tripModel
+      .findOneAndUpdate(
+        { _id: id },
+        {
+          status: TripStatus.COMPLETED,
+        },
+        { new: true },
+      )
+      .lean();
   }
 }

@@ -15,6 +15,6 @@ export class MongooseInvoiceRepository
   }
 
   async create(data: any): Promise<Invoice> {
-    return this.invoiceModel.create(data);
+    return (await this.invoiceModel.create(data)).toJSON();
   }
 }
