@@ -39,43 +39,6 @@ describe('PassengerRequestTrip', () => {
     );
   });
 
-  it('should create a trip when the passenger exists and has no active trips', async () => {
-    const id = 'passenger-id';
-    const data: RequestTrip = {
-      origin: {
-        latitude: faker.location.latitude(),
-        longitude: faker.location.longitude(),
-      },
-      destination: {
-        latitude: faker.location.latitude(),
-        longitude: faker.location.longitude(),
-      },
-    };
-
-    const passenger = { id };
-    const trip: Trip = {
-      id: 'requested-trip-id',
-      status: TripStatus.REQUESTED,
-      ...data,
-      passenger: id,
-    };
-
-    (mockPassengerRepository.findById as jest.Mock).mockReturnValue(passenger);
-    (mockTripRepository.findByPassenger as jest.Mock).mockResolvedValue([]);
-    (mockTripRepository.request as jest.Mock).mockResolvedValue(trip);
-
-    const result = await passengerRequestTrip.execute(id, data);
-
-    expect(mockPassengerRepository.findById).toHaveBeenCalledWith(id);
-    expect(mockTripRepository.findByPassenger).toHaveBeenCalledWith(id, [
-      TripStatus.REQUESTED,
-      TripStatus.ACCEPT,
-    ]);
-    expect(mockTripRepository.request).toHaveBeenCalledWith(id, data);
-    expect(mockLogger.info).toHaveBeenCalled();
-    expect(result.result).toBe(trip);
-  });
-
   it('should throw BadRequestException if the passenger does not exist', async () => {
     const id = 'passenger-id';
     const data: RequestTrip = {} as unknown as RequestTrip;
@@ -128,5 +91,42 @@ describe('PassengerRequestTrip', () => {
     expect(mockExceptions.BadRequestException).toHaveBeenCalledWith({
       message: `Passenger with id: ${id} has requested or active trips`,
     });
+  });
+
+  it('should create a trip when the passenger exists and has no active trips', async () => {
+    const id = 'passenger-id';
+    const data: RequestTrip = {
+      origin: {
+        latitude: faker.location.latitude(),
+        longitude: faker.location.longitude(),
+      },
+      destination: {
+        latitude: faker.location.latitude(),
+        longitude: faker.location.longitude(),
+      },
+    };
+
+    const passenger = { id };
+    const trip: Trip = {
+      id: 'requested-trip-id',
+      status: TripStatus.REQUESTED,
+      ...data,
+      passenger: id,
+    };
+
+    (mockPassengerRepository.findById as jest.Mock).mockReturnValue(passenger);
+    (mockTripRepository.findByPassenger as jest.Mock).mockResolvedValue([]);
+    (mockTripRepository.request as jest.Mock).mockResolvedValue(trip);
+
+    const result = await passengerRequestTrip.execute(id, data);
+
+    expect(mockPassengerRepository.findById).toHaveBeenCalledWith(id);
+    expect(mockTripRepository.findByPassenger).toHaveBeenCalledWith(id, [
+      TripStatus.REQUESTED,
+      TripStatus.ACCEPT,
+    ]);
+    expect(mockTripRepository.request).toHaveBeenCalledWith(id, data);
+    expect(mockLogger.info).toHaveBeenCalled();
+    expect(result.result).toBe(trip);
   });
 });

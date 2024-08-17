@@ -5,7 +5,7 @@ import { SortEnum } from '@Domain/entities/common.entity';
 import { Driver } from '@Domain/entities/driver.entity';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
-describe('Driver - FindAll', () => {
+describe('DriverFindAll', () => {
   let findAllUseCase: DriverFindAll;
   let mockDriverRepository: jest.Mocked<DriverRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
@@ -23,7 +23,7 @@ describe('Driver - FindAll', () => {
     findAllUseCase = new DriverFindAll(mockDriverRepository, mockLogger);
   });
 
-  it('should return an paginate object with Drivers found', async () => {
+  it('should return an paginate object with drivers found', async () => {
     const drivers = makeDriversSeeds(2);
     const count = 10;
 

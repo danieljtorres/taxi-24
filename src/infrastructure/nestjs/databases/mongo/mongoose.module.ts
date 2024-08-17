@@ -17,6 +17,8 @@ import { PassengerRepository } from '@Application/repositories/passenger.reposit
 import { MongoosePassengerRepository } from './repositories/passenger.repository';
 import { TripRepository } from '@Application/repositories/trip.repository';
 import { MongooseTripRepository } from './repositories/trip.repository';
+import { InvoiceRepository } from '@Application/repositories/invoice.repository';
+import { MongooseInvoiceRepository } from './repositories/invoice.repository';
 
 @Module({
   imports: [
@@ -46,12 +48,17 @@ import { MongooseTripRepository } from './repositories/trip.repository';
       provide: TripRepository,
       useClass: MongooseTripRepository,
     },
+    {
+      provide: InvoiceRepository,
+      useClass: MongooseInvoiceRepository,
+    },
     SeedsCommand,
   ],
   exports: [
     DriverRepository,
     PassengerRepository,
     TripRepository,
+    InvoiceRepository,
     SeedsCommand,
   ],
 })

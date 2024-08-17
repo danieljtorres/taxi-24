@@ -5,7 +5,7 @@ import { SortEnum } from '@Domain/entities/common.entity';
 import { Passenger } from '@Domain/entities/passenger.entity';
 import { makePassengersSeeds } from 'test/seeds/passenger';
 
-describe('Passenger - FindAll', () => {
+describe('PassengerFindAll', () => {
   let findAllUseCase: PassengerFindAll;
   let mockPassengerRepository: jest.Mocked<PassengerRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
@@ -23,7 +23,7 @@ describe('Passenger - FindAll', () => {
     findAllUseCase = new PassengerFindAll(mockPassengerRepository, mockLogger);
   });
 
-  it('should return an paginate object with Passengers found', async () => {
+  it('should return an paginate object with passengers found', async () => {
     const passengers = makePassengersSeeds(2);
     const count = 10;
 

@@ -1,17 +1,19 @@
 import { ExceptionService } from '@Application/providers/exception.service';
 import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
+import { InvoiceRepository } from '@Application/repositories/invoice.repository';
 import { TripRepository } from '@Application/repositories/trip.repository';
 import { Result } from '@Domain/entities/common.entity';
 import { Trip, TripStatus } from '@Domain/entities/trip.entity';
-// import { RATE_PER_KM } from '@Utils/constants';
-// import { getDistance } from '@Utils/geo';
+import { RATE_PER_KM } from '@Utils/constants';
+import { getDistance } from '@Utils/geo';
 import { tripStatusToLabel } from '@Utils/tripStatus';
 
 export class TripComplete {
   constructor(
     private readonly driverRepository: DriverRepository,
     private readonly tripRepository: TripRepository,
+    private readonly invoiceRepository: InvoiceRepository,
     private readonly exceptions: ExceptionService,
     private readonly logger: LoggerService,
   ) {}
@@ -51,14 +53,16 @@ export class TripComplete {
     const tripAccepted = await this.tripRepository.complete(id);
 
     //Create Invoice for trip
-    // const amount = Math.ceil(
-    //   getDistance(trip.origin, trip.destination) * RATE_PER_KM,
-    // );
+    const amount = Math.ceil(
+      getDistance(trip.origin, trip.destination) * RATE_PER_KM,
+    );
 
-    // const invoice = await this.invoiceRepository.create({
-    //   amount,
-    //   trip: trip.id,
-    // });
+    const invoice = await this.invoiceRepository.create({
+      amount,
+      trip: trip.id,
+    });
+
+    tripAccepted.invoice = invoice;
 
     return {
       result: tripAccepted,

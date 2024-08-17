@@ -6,6 +6,7 @@ import { DriverRepository } from '@Application/repositories/driver.repository';
 import { ExceptionService } from '@Application/providers/exception.service';
 import { TripAccept } from '@Application/userCases/trips/accept';
 import { TripComplete } from '@Application/userCases/trips/complete';
+import { InvoiceRepository } from '@Application/repositories/invoice.repository';
 
 @Module({})
 export class TripsModule {
@@ -48,6 +49,7 @@ export class TripsModule {
           inject: [
             DriverRepository,
             TripRepository,
+            InvoiceRepository,
             ExceptionService,
             LoggerService,
           ],
@@ -55,12 +57,14 @@ export class TripsModule {
           useFactory: (
             driverRepository: DriverRepository,
             tripRepository: TripRepository,
+            invoiceRepository: InvoiceRepository,
             exceptions: ExceptionService,
             logger: LoggerService,
           ) =>
             new TripComplete(
               driverRepository,
               tripRepository,
+              invoiceRepository,
               exceptions,
               logger,
             ),

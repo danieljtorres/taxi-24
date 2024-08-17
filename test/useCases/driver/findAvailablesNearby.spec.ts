@@ -5,7 +5,7 @@ import { Driver } from '@Domain/entities/driver.entity';
 import { faker } from '@faker-js/faker';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
-describe('Driver - FindAvailablesNearby', () => {
+describe('DriverFindAvailablesNearby', () => {
   let findAvailablesNearbyUseCase: DriverFindAvailablesNearby;
   let mockDriverRepository: jest.Mocked<DriverRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
@@ -25,7 +25,7 @@ describe('Driver - FindAvailablesNearby', () => {
     );
   });
 
-  it('should return an object with Drivers found', async () => {
+  it('should return an object with drivers found', async () => {
     const drivers = makeDriversSeeds(2);
 
     const location = {

@@ -4,7 +4,7 @@ import { DriverFindAvailables } from '@Application/userCases/driver/findAvailabl
 import { Driver } from '@Domain/entities/driver.entity';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
-describe('Driver - FindAvailables', () => {
+describe('DriverFindAvailables', () => {
   let findAvailablesUseCase: DriverFindAvailables;
   let mockDriverRepository: jest.Mocked<DriverRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
@@ -24,7 +24,7 @@ describe('Driver - FindAvailables', () => {
     );
   });
 
-  it('should return an object with Drivers found', async () => {
+  it('should return an object with drivers found', async () => {
     const drivers = makeDriversSeeds(2);
 
     mockDriverRepository.findAvailables.mockResolvedValue(drivers);

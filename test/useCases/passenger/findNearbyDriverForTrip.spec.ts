@@ -7,7 +7,7 @@ import { PassengerFindNearbyDriverForTrip } from '@Application/userCases/passeng
 import { faker } from '@faker-js/faker';
 import { MIN_NEARBY_DRIVERS } from '@Utils/constants';
 
-describe('Passenger - PassengerFindNearbyDriverForTrip', () => {
+describe('PassengerFindNearbyDriverForTrip', () => {
   let findNearbyDriverForTrip: PassengerFindNearbyDriverForTrip;
   let mockPassengerRepository: jest.Mocked<PassengerRepository>;
   let mockTripRepository: jest.Mocked<TripRepository>;
