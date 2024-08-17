@@ -6,19 +6,32 @@ import {
   InvoiceStatus,
 } from '@Domain/entities/invoice.entity';
 import { Trip } from './trip.schema';
+import { RATE_PER_KM } from '@Utils/constants';
 
 export type InvoiceDocument = HydratedDocument<Invoice>;
 
 @Schema({
   timestamps: true,
-  toJSON: { getters: true, virtuals: true },
+  toJSON: {
+    getters: true,
+    virtuals: true,
+    transform: (doc, ret) => {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+    },
+  },
   toObject: { getters: true, virtuals: true },
-  versionKey: false,
-  id: true,
 })
 export class Invoice implements InvoiceEntity {
   @Prop()
   amount: number;
+
+  @Prop({ default: RATE_PER_KM })
+  rate: number;
+
+  @Prop({ default: 0 })
+  totalDistance: number;
 
   @Prop({ default: InvoiceStatus.PENDING })
   status: number;

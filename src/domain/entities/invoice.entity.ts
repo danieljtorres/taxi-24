@@ -6,7 +6,10 @@ export enum InvoiceStatus {
 }
 
 export interface Invoice {
+  id?: string;
   amount: number;
+  rate: number;
+  totalDistance: number;
   status: InvoiceStatus;
   trip: string | Trip;
 }

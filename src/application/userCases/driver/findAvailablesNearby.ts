@@ -3,6 +3,7 @@ import { LoggerService } from '@Application/providers/logger.service';
 import { Result } from '@Domain/entities/common.entity';
 import { Driver } from '@Domain/entities/driver.entity';
 import { Location } from '@Domain/entities/trip.entity';
+import { getDistance } from '@Utils/geo';
 
 export class DriverFindAvailablesNearby {
   constructor(
@@ -18,7 +19,12 @@ export class DriverFindAvailablesNearby {
     const drivers = await this.driverRepository.findAvailablesNearby(location);
 
     return {
-      result: drivers,
+      result: drivers.map((driver) => {
+        return {
+          distance: getDistance(location, driver.actualLocation),
+          ...driver,
+        };
+      }),
     };
   }
 }

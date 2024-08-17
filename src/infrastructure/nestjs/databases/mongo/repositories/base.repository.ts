@@ -15,7 +15,7 @@ export abstract class BaseMongooseRepository<T> implements IBaseRepository<T> {
   }
 
   async findById(id: string): Promise<T> {
-    return this.model.findById(id);
+    return (await this.model.findById(id)).toJSON();
   }
 
   async findAll(
@@ -27,6 +27,9 @@ export abstract class BaseMongooseRepository<T> implements IBaseRepository<T> {
 
     const skip = getMongoSkip(page, limit, totalPages);
 
-    return this.model.find(query, {}, { skip, limit }).sort(sort.toLowerCase());
+    return this.model
+      .find(query, {}, { skip, limit })
+      .sort(sort.toLowerCase())
+      .lean();
   }
 }

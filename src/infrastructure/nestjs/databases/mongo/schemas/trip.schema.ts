@@ -8,6 +8,7 @@ import {
 } from '@Domain/entities/trip.entity';
 import { Passenger } from './passenger.schema';
 import { Driver } from './driver.schema';
+import { transformDoc } from '@Utils/mongoose';
 
 export type TripDocument = HydratedDocument<Trip>;
 
@@ -21,10 +22,16 @@ export class Location implements LocationEntity {
 
 @Schema({
   timestamps: true,
-  toJSON: { getters: true, virtuals: true },
+  toJSON: {
+    getters: true,
+    virtuals: true,
+    transform: (doc, ret) => {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+    },
+  },
   toObject: { getters: true, virtuals: true },
-  versionKey: false,
-  id: true,
 })
 export class Trip implements TripEntity {
   @Prop({ type: Object })
@@ -60,6 +67,17 @@ TripSchema.virtual('invoice', {
   localField: '_id',
   foreignField: 'trip',
   justOne: true,
+});
+
+TripSchema.post(['find', 'findOne', 'findOneAndUpdate'], function (res) {
+  if (!this.mongooseOptions().lean) {
+    return;
+  }
+  if (Array.isArray(res)) {
+    res.forEach(transformDoc);
+    return;
+  }
+  transformDoc(res);
 });
 
 export { TripSchema };
