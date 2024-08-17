@@ -5,6 +5,7 @@ import { InvoiceRepository } from '@Application/repositories/invoice.repository'
 import { TripRepository } from '@Application/repositories/trip.repository';
 import { TripComplete } from '@Application/userCases/trips/complete';
 import { Trip, TripStatus } from '@Domain/entities/trip.entity';
+import { faker } from '@faker-js/faker';
 import { tripStatusToLabel } from '@Utils/tripStatus';
 
 describe('TripComplete', () => {
@@ -175,8 +176,14 @@ describe('TripComplete', () => {
       id,
       status: TripStatus.ACCEPT,
       driver: driverId,
-      origin: undefined,
-      destination: undefined,
+      origin: {
+        latitude: faker.location.latitude(),
+        longitude: faker.location.longitude(),
+      },
+      destination: {
+        latitude: faker.location.latitude(),
+        longitude: faker.location.longitude(),
+      },
       passenger: '',
     };
     const driver = { id: driverId };
@@ -184,8 +191,14 @@ describe('TripComplete', () => {
       id,
       status: TripStatus.COMPLETED,
       driver: driverId,
-      origin: undefined,
-      destination: undefined,
+      origin: {
+        latitude: faker.location.latitude(),
+        longitude: faker.location.longitude(),
+      },
+      destination: {
+        latitude: faker.location.latitude(),
+        longitude: faker.location.longitude(),
+      },
       passenger: '',
     };
 
