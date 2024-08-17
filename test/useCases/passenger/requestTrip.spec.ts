@@ -69,7 +69,7 @@ describe('PassengerRequestTrip', () => {
     expect(mockPassengerRepository.findById).toHaveBeenCalledWith(id);
     expect(mockTripRepository.findByPassenger).toHaveBeenCalledWith(id, [
       TripStatus.REQUESTED,
-      TripStatus.ASSIGNED,
+      TripStatus.ACCEPT,
     ]);
     expect(mockTripRepository.request).toHaveBeenCalledWith(id, data);
     expect(mockLogger.info).toHaveBeenCalled();
@@ -123,7 +123,7 @@ describe('PassengerRequestTrip', () => {
     expect(mockPassengerRepository.findById).toHaveBeenCalledWith(id);
     expect(mockTripRepository.findByPassenger).toHaveBeenCalledWith(id, [
       TripStatus.REQUESTED,
-      TripStatus.ASSIGNED,
+      TripStatus.ACCEPT,
     ]);
     expect(mockExceptions.BadRequestException).toHaveBeenCalledWith({
       message: `Passenger with id: ${id} has requested or active trips`,

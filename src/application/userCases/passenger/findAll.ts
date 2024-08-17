@@ -22,6 +22,7 @@ export class PassengerFindAll {
     const totalPages = calculatedPages(count, limit);
 
     const passengers = await this.passengerRepository.findAll(
+      {},
       pagination,
       totalPages,
     );

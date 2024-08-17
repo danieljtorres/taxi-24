@@ -16,9 +16,11 @@ export class MongooseTripRepository
   }
 
   async findActives(): Promise<Trip[]> {
-    return this.tripModel.find({
-      status: TripStatus.ASSIGNED,
-    });
+    return this.tripModel
+      .find({
+        status: TripStatus.ACCEPT,
+      })
+      .populate('passenger', 'driver');
   }
 
   async findByDriver(driverId: string, status: TripStatus[]): Promise<Trip[]> {
@@ -50,7 +52,9 @@ export class MongooseTripRepository
       { _id: id },
       {
         driver: driverId,
+        status: TripStatus.ACCEPT,
       },
+      { new: true },
     );
   }
 
@@ -60,6 +64,7 @@ export class MongooseTripRepository
       {
         status: TripStatus.COMPLETED,
       },
+      { new: true },
     );
   }
 }

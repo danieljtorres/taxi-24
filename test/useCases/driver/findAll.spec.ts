@@ -2,7 +2,7 @@ import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
 import { DriverFindAll } from '@Application/userCases/driver/findAll';
 import { SortEnum } from '@Domain/entities/common.entity';
-import { DriverPresenter } from '@Domain/presenters/driver.presenter';
+import { Driver } from '@Domain/entities/driver.entity';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
 describe('Driver - FindAll', () => {
@@ -42,11 +42,11 @@ describe('Driver - FindAll', () => {
 
     expect(mockDriverRepository.count).toHaveBeenCalled();
     expect(mockDriverRepository.findAll).toHaveBeenCalledWith(
+      {},
       pagination,
       totalPages,
     );
-    expect(result.result).toBeInstanceOf(Array<DriverPresenter>);
-    expect(result.result[0]).toBeInstanceOf(DriverPresenter);
+    expect(result.result).toBeInstanceOf(Array<Driver>);
     expect(result.totalPages).toBe(totalPages);
     expect(result.totalItems).toBe(count);
   });

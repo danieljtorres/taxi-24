@@ -2,7 +2,7 @@ import { LoggerService } from '@Application/providers/logger.service';
 import { PassengerRepository } from '@Application/repositories/passenger.repository';
 import { PassengerFindAll } from '@Application/userCases/passenger/findAll';
 import { SortEnum } from '@Domain/entities/common.entity';
-import { PassengerPresenter } from '@Domain/presenters/passanger.presenter';
+import { Passenger } from '@Domain/entities/passenger.entity';
 import { makePassengersSeeds } from 'test/seeds/passenger';
 
 describe('Passenger - FindAll', () => {
@@ -42,11 +42,11 @@ describe('Passenger - FindAll', () => {
 
     expect(mockPassengerRepository.count).toHaveBeenCalled();
     expect(mockPassengerRepository.findAll).toHaveBeenCalledWith(
+      {},
       pagination,
       totalPages,
     );
-    expect(result.result).toBeInstanceOf(Array<PassengerPresenter>);
-    expect(result.result[0]).toBeInstanceOf(PassengerPresenter);
+    expect(result.result).toBeInstanceOf(Array<Passenger>);
     expect(result.totalPages).toBe(totalPages);
     expect(result.totalItems).toBe(count);
   });

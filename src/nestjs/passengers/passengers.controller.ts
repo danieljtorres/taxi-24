@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import {
   ApiBody,
-  ApiOkResponse,
+  // ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiTags,
@@ -11,18 +11,11 @@ import { PaginationDTO } from '@Domain/dtos/common.dto';
 import { SwaggerQueryPagination } from '@Infrastructure/nestjs/decorators/swaggerPaginationParams.decorator';
 import { Pagination } from '@Domain/entities/common.entity';
 import { PassengersModule } from './passengers.module';
-import { PassengerPresenter } from '@Domain/presenters/passanger.presenter';
-import {
-  PaginationResultPresenter,
-  ResultPresenter,
-} from '@Domain/presenters/common';
 import { IsObjectIdPipe } from 'nestjs-object-id';
 import { PassengerFindAll } from '@Application/userCases/passenger/findAll';
 import { PassengerFindById } from '@Application/userCases/passenger/findById';
 import { RequestTripDTO } from '@Domain/dtos/trip.dto';
 import { PassengerRequestTrip } from '@Application/userCases/passenger/requestTrip';
-import { TripPresenter } from '@Domain/presenters/trip.presenter';
-import { DriverPresenter } from '@Domain/presenters/driver.presenter';
 import { PassengerFindNearbyDriverForTrip } from '@Application/userCases/passenger/findNearbyDriverForTrip';
 
 @Controller('v1/passengers')
@@ -44,9 +37,9 @@ export class PassengersController {
   @ApiOperation({
     description: 'Get All Passengers paginated',
   })
-  @ApiOkResponse({
-    type: PaginationResultPresenter<PassengerPresenter>,
-  })
+  // @ApiOkResponse({
+  //   type: PaginationResultPresenter<PassengerPresenter>,
+  // })
   async getAll(@GetPagination() pagination: PaginationDTO) {
     return await this.findAllUseCase.execute(pagination as Pagination);
   }
@@ -59,9 +52,9 @@ export class PassengersController {
   @ApiOperation({
     description: 'Get Passenger by id',
   })
-  @ApiOkResponse({
-    type: ResultPresenter<PassengerPresenter>,
-  })
+  // @ApiOkResponse({
+  //   type: ResultPresenter<PassengerPresenter>,
+  // })
   async getById(@Param('id', IsObjectIdPipe) id: string) {
     return await this.findByIdUseCase.execute(id);
   }
@@ -78,9 +71,9 @@ export class PassengersController {
   @ApiOperation({
     description: 'Get the 3 nearby drivers for a requested trip',
   })
-  @ApiOkResponse({
-    type: ResultPresenter<DriverPresenter>,
-  })
+  // @ApiOkResponse({
+  //   type: ResultPresenter<DriverPresenter>,
+  // })
   async getNearbyDriversByTrip(
     @Param('id', IsObjectIdPipe) id: string,
     @Param('tripId', IsObjectIdPipe) tripId: string,
@@ -97,9 +90,9 @@ export class PassengersController {
   @ApiOperation({
     description: 'Post data to request a trip for passenger',
   })
-  @ApiOkResponse({
-    type: ResultPresenter<TripPresenter>,
-  })
+  // @ApiOkResponse({
+  //   type: ResultPresenter<TripPresenter>,
+  // })
   async requestTrip(
     @Param('id', IsObjectIdPipe) id: string,
     @Body() data: RequestTripDTO,

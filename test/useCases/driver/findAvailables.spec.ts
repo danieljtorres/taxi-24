@@ -1,7 +1,7 @@
 import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
 import { DriverFindAvailables } from '@Application/userCases/driver/findAvailables';
-import { DriverPresenter } from '@Domain/presenters/driver.presenter';
+import { Driver } from '@Domain/entities/driver.entity';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
 describe('Driver - FindAvailables', () => {
@@ -32,7 +32,6 @@ describe('Driver - FindAvailables', () => {
     const result = await findAvailablesUseCase.execute();
 
     expect(mockDriverRepository.findAvailables).toHaveBeenCalled();
-    expect(result.result).toBeInstanceOf(Array<DriverPresenter>);
-    expect(result.result[0]).toBeInstanceOf(DriverPresenter);
+    expect(result.result).toBeInstanceOf(Array<Driver>);
   });
 });

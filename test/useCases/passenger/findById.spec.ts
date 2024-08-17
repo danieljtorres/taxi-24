@@ -1,7 +1,6 @@
 import { PassengerFindById } from '@Application/userCases/passenger/findById';
 import { LoggerService } from '@Application/providers/logger.service';
 import { PassengerRepository } from '@Application/repositories/passenger.repository';
-import { PassengerPresenter } from '@Domain/presenters/passanger.presenter';
 import { makePassengerSeed } from 'test/seeds/passenger';
 
 describe('FindById', () => {
@@ -28,8 +27,7 @@ describe('FindById', () => {
     const result = await findById.execute(passenger.id);
 
     expect(mockPassengerRepository.findById).toHaveBeenCalledWith(passenger.id);
-    expect(result.result).toBeInstanceOf(PassengerPresenter);
-    expect(result.result).toEqual(new PassengerPresenter(passenger));
+    expect(result.result).toEqual(passenger);
   });
 
   it('should return null when no Passenger is found', async () => {

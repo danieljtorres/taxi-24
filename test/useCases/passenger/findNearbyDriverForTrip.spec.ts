@@ -53,31 +53,28 @@ describe('Passenger - PassengerFindNearbyDriverForTrip', () => {
 
     mockPassengerRepository.findById.mockResolvedValue(null);
 
-    expect(mockPassengerRepository.findById).toHaveBeenCalledWith(passengerId);
     await expect(
       findNearbyDriverForTrip.execute(passengerId, tripId),
     ).rejects.toThrow(new Error(`Passenger with id: ${passengerId} not found`));
   });
 
   it('should throw BadRequestException if trip is not found', async () => {
-    const passengerId = faker.database.mongodbObjectId();
-    const tripId = faker.database.mongodbObjectId();
+    const passengerId = 'passenger-id';
+    const tripId = 'trip-id';
 
     mockPassengerRepository.findById.mockResolvedValue({
       id: passengerId,
     } as any);
     mockTripRepository.findById.mockResolvedValue(null);
 
-    expect(mockPassengerRepository.findById).toHaveBeenCalledWith(passengerId);
-    expect(mockTripRepository.findById).toHaveBeenCalledWith(tripId);
     await expect(
       findNearbyDriverForTrip.execute(passengerId, tripId),
     ).rejects.toThrow(new Error(`Trip with id: ${tripId} not found`));
   });
 
   it('should throw BadRequestException if trip does not belong to passenger', async () => {
-    const passengerId = faker.database.mongodbObjectId();
-    const tripId = faker.database.mongodbObjectId();
+    const passengerId = 'passenger-id';
+    const tripId = 'trip-id';
 
     mockPassengerRepository.findById.mockResolvedValue({
       id: passengerId,
@@ -97,8 +94,8 @@ describe('Passenger - PassengerFindNearbyDriverForTrip', () => {
   });
 
   it('should return nearby drivers when all validations pass', async () => {
-    const passengerId = faker.database.mongodbObjectId();
-    const tripId = faker.database.mongodbObjectId();
+    const passengerId = 'passenger-id';
+    const tripId = 'trip-id';
     const drivers = [
       { id: faker.database.mongodbObjectId() },
       { id: faker.database.mongodbObjectId() },

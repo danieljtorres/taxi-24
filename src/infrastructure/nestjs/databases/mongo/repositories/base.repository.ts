@@ -1,7 +1,7 @@
 import { IBaseRepository } from '@Application/repositories/base.repository';
-import { Pagination, SortEnum } from '@Domain/entities/common.entity';
+import { Pagination } from '@Domain/entities/common.entity';
 import { getMongoSkip } from '@Utils/pagination';
-import { Model, PipelineStage } from 'mongoose';
+import { Model } from 'mongoose';
 
 export abstract class BaseMongooseRepository<T> implements IBaseRepository<T> {
   protected readonly model: Model<T>;
@@ -18,23 +18,15 @@ export abstract class BaseMongooseRepository<T> implements IBaseRepository<T> {
     return this.model.findById(id);
   }
 
-  async findAll(pagination: Pagination, totalPages: number): Promise<T[]> {
+  async findAll(
+    query: Record<string, any>,
+    pagination: Pagination,
+    totalPages: number,
+  ): Promise<T[]> {
     const { page, limit, sort } = pagination;
 
     const skip = getMongoSkip(page, limit, totalPages);
 
-    const aggregation: PipelineStage[] = [
-      { $sort: { name: sort == SortEnum.DESC ? -1 : 1 } },
-      {
-        $skip: skip,
-      },
-      {
-        $limit: limit,
-      },
-    ];
-
-    return (await this.model.aggregate(aggregation)).map((doc) =>
-      this.model.hydrate(doc),
-    );
+    return this.model.find(query, {}, { skip, limit }).sort(sort.toLowerCase());
   }
 }

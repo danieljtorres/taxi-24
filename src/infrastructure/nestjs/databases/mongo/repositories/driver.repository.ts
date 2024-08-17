@@ -28,7 +28,7 @@ export class MongooseDriverRepository
             {
               $match: {
                 $expr: {
-                  $in: ['$status', [TripStatus.ASSIGNED]],
+                  $in: ['$status', [TripStatus.ACCEPT]],
                 },
               },
             },
@@ -65,7 +65,7 @@ export class MongooseDriverRepository
             {
               $match: {
                 $expr: {
-                  $in: ['$status', [TripStatus.ASSIGNED]],
+                  $in: ['$status', [TripStatus.ACCEPT]],
                 },
               },
             },

@@ -1,7 +1,7 @@
 import { Controller, Get, Inject, Param, Query } from '@nestjs/common';
 import {
-  ApiOkResponse,
   ApiOperation,
+  // ApiOkResponse,
   ApiParam,
   ApiQuery,
   ApiTags,
@@ -11,11 +11,6 @@ import { PaginationDTO } from '@Domain/dtos/common.dto';
 import { SwaggerQueryPagination } from '@Infrastructure/nestjs/decorators/swaggerPaginationParams.decorator';
 import { Pagination } from '@Domain/entities/common.entity';
 import { DriversModule } from './drivers.module';
-import { DriverPresenter } from '@Domain/presenters/driver.presenter';
-import {
-  PaginationResultPresenter,
-  ResultPresenter,
-} from '@Domain/presenters/common';
 import { IsObjectIdPipe } from 'nestjs-object-id';
 import { DriverFindAll } from '@Application/userCases/driver/findAll';
 import { DriverFindAvailables } from '@Application/userCases/driver/findAvailables';
@@ -42,9 +37,9 @@ export class DriversController {
   @ApiOperation({
     description: 'Get All Drivers paginated',
   })
-  @ApiOkResponse({
-    type: PaginationResultPresenter<DriverPresenter>,
-  })
+  // @ApiOkResponse({
+  //   type: PaginationResultPresenter<DriverPresenter>,
+  // })
   async getAll(@GetPagination() pagination: PaginationDTO) {
     return await this.findAllUseCase.execute(pagination as Pagination);
   }
@@ -52,11 +47,11 @@ export class DriversController {
   @Get('availables')
   @ApiOperation({
     description:
-      'Get Drivers availables (Where a trip is not is status ASSIGNED or ONGOING)',
+      'Get Drivers availables (Where a trip is not is status ACCEPT or ONGOING)',
   })
-  @ApiOkResponse({
-    type: ResultPresenter<DriverPresenter>,
-  })
+  // @ApiOkResponse({
+  //   type: ResultPresenter<DriverPresenter>,
+  // })
   async getAvailables() {
     return await this.findAvailablesUseCase.execute();
   }
@@ -67,9 +62,9 @@ export class DriversController {
   @ApiOperation({
     description: 'Get Drivers availables nearby (close to 3 km or less)',
   })
-  @ApiOkResponse({
-    type: ResultPresenter<Array<DriverPresenter>>,
-  })
+  // @ApiOkResponse({
+  //   type: ResultPresenter<Array<DriverPresenter>>,
+  // })
   async getAvailablesNearby(@Query() location: LocationDTO) {
     return await this.findAvailablesNearbyUseCase.execute(location);
   }
@@ -82,9 +77,9 @@ export class DriversController {
   @ApiOperation({
     description: 'Get Driver by id',
   })
-  @ApiOkResponse({
-    type: ResultPresenter<DriverPresenter>,
-  })
+  // @ApiOkResponse({
+  //   type: ResultPresenter<DriverPresenter>,
+  // })
   async getById(@Param('id', IsObjectIdPipe) id: string) {
     return await this.findByIdUseCase.execute(id);
   }

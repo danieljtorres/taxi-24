@@ -1,7 +1,7 @@
 import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
 import { DriverFindAvailablesNearby } from '@Application/userCases/driver/findAvailablesNearby';
-import { DriverPresenter } from '@Domain/presenters/driver.presenter';
+import { Driver } from '@Domain/entities/driver.entity';
 import { faker } from '@faker-js/faker';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
@@ -40,7 +40,6 @@ describe('Driver - FindAvailablesNearby', () => {
     expect(mockDriverRepository.findAvailablesNearby).toHaveBeenCalledWith(
       location,
     );
-    expect(result.result).toBeInstanceOf(Array<DriverPresenter>);
-    expect(result.result[0]).toBeInstanceOf(DriverPresenter);
+    expect(result.result).toBeInstanceOf(Array<Driver>);
   });
 });
