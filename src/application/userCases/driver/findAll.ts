@@ -1,20 +1,18 @@
 import { DriverRepository } from '@Application/repositories/driver.repository';
 import { calculatedPages } from '@Utils/pagination';
 import { Pagination, PaginationResult } from '@Domain/entities/common.entity';
-import { DriverPresenter } from '@Domain/presenters/driver.presenter';
 import { LoggerService } from '@Application/providers/logger.service';
+import { Driver } from '@Domain/entities/driver.entity';
 
-export class FindAll {
+export class DriverFindAll {
   constructor(
     private readonly driverRepository: DriverRepository,
     private readonly logger: LoggerService,
   ) {}
 
-  async execute(
-    pagination: Pagination,
-  ): Promise<PaginationResult<DriverPresenter>> {
+  async execute(pagination: Pagination): Promise<PaginationResult<Driver>> {
     this.logger.info(
-      `Starting ${FindAll.name} use case with pagination ${JSON.stringify(pagination)}`,
+      `Starting ${DriverFindAll.name} use case with pagination ${JSON.stringify(pagination)}`,
     );
 
     const { page, limit } = pagination;
@@ -26,7 +24,7 @@ export class FindAll {
     const drivers = await this.driverRepository.findAll(pagination, totalPages);
 
     return {
-      result: drivers.map((driver) => new DriverPresenter(driver)),
+      result: drivers,
       page,
       totalPages,
       totalItems: count,

@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Inject,
-  Param,
-  ParseArrayPipe,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Inject, Param, Query } from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
@@ -13,30 +6,35 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import * as driverUseCases from '@Application/userCases/driver';
 import { GetPagination } from '@Infrastructure/nestjs/decorators/getPagination.decorator';
 import { PaginationDTO } from '@Domain/dtos/common.dto';
 import { SwaggerQueryPagination } from '@Infrastructure/nestjs/decorators/swaggerPaginationParams.decorator';
 import { Pagination } from '@Domain/entities/common.entity';
-import { DriversUseCasesModule } from './driversUseCases.module';
+import { DriversModule } from './drivers.module';
 import { DriverPresenter } from '@Domain/presenters/driver.presenter';
 import {
   PaginationResultPresenter,
   ResultPresenter,
 } from '@Domain/presenters/common';
+import { IsObjectIdPipe } from 'nestjs-object-id';
+import { DriverFindAll } from '@Application/userCases/driver/findAll';
+import { DriverFindAvailables } from '@Application/userCases/driver/findAvailables';
+import { DriverFindAvailablesNearby } from '@Application/userCases/driver/findAvailablesNearby';
+import { DriverFindById } from '@Application/userCases/driver/findById';
+import { LocationDTO } from '@Domain/dtos/trip.dto';
 
 @Controller('v1/drivers')
 @ApiTags('Drivers')
 export class DriversController {
   constructor(
-    @Inject(DriversUseCasesModule.FIND_ALL_USECASE)
-    private readonly findAllUseCase: driverUseCases.FindAll,
-    @Inject(DriversUseCasesModule.FIND_AVAILABLES_USECASE)
-    private readonly findAvailablesUseCase: driverUseCases.FindAvailables,
-    @Inject(DriversUseCasesModule.FIND_AVAILABLES_NEARBY_USECASE)
-    private readonly findAvailablesNearbyUseCase: driverUseCases.FindAvailablesNearby,
-    @Inject(DriversUseCasesModule.FIND_BY_ID_USECASE)
-    private readonly findByIdUseCase: driverUseCases.FindById,
+    @Inject(DriversModule.FIND_ALL_USECASE)
+    private readonly findAllUseCase: DriverFindAll,
+    @Inject(DriversModule.FIND_AVAILABLES_USECASE)
+    private readonly findAvailablesUseCase: DriverFindAvailables,
+    @Inject(DriversModule.FIND_AVAILABLES_NEARBY_USECASE)
+    private readonly findAvailablesNearbyUseCase: DriverFindAvailablesNearby,
+    @Inject(DriversModule.FIND_BY_ID_USECASE)
+    private readonly findByIdUseCase: DriverFindById,
   ) {}
 
   @Get('')
@@ -64,17 +62,15 @@ export class DriversController {
   }
 
   @Get('availables/nearby')
-  @ApiQuery({ name: 'location', isArray: true, type: Number, required: false })
+  @ApiQuery({ name: 'latitude', type: Number, required: true })
+  @ApiQuery({ name: 'longitude', type: Number, required: true })
   @ApiOperation({
     description: 'Get Drivers availables nearby (close to 3 km or less)',
   })
   @ApiOkResponse({
     type: ResultPresenter<Array<DriverPresenter>>,
   })
-  async getAvailablesNearby(
-    @Query('location', new ParseArrayPipe({ items: Number, separator: ',' }))
-    location: number[],
-  ) {
+  async getAvailablesNearby(@Query() location: LocationDTO) {
     return await this.findAvailablesNearbyUseCase.execute(location);
   }
 
@@ -89,7 +85,7 @@ export class DriversController {
   @ApiOkResponse({
     type: ResultPresenter<DriverPresenter>,
   })
-  async getById(@Param() params: any) {
-    return await this.findByIdUseCase.execute(params.id);
+  async getById(@Param('id', IsObjectIdPipe) id: string) {
+    return await this.findByIdUseCase.execute(id);
   }
 }

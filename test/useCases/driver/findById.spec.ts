@@ -1,11 +1,10 @@
-import { FindById } from '@Application/userCases/driver';
+import { DriverFindById } from '@Application/userCases/driver/findById';
 import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
-import { DriverPresenter } from '@Domain/presenters/driver.presenter';
 import { makeDriverSeed } from 'test/seeds/driver';
 
 describe('FindById', () => {
-  let findById: FindById;
+  let findById: DriverFindById;
   let mockDriverRepository: jest.Mocked<DriverRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
 
@@ -18,7 +17,7 @@ describe('FindById', () => {
       info: jest.fn(),
     } as unknown as jest.Mocked<LoggerService>;
 
-    findById = new FindById(mockDriverRepository, mockLogger);
+    findById = new DriverFindById(mockDriverRepository, mockLogger);
   });
 
   it('should return an object with a Driver found', async () => {
@@ -28,8 +27,7 @@ describe('FindById', () => {
     const result = await findById.execute(driver.id);
 
     expect(mockDriverRepository.findById).toHaveBeenCalledWith(driver.id);
-    expect(result.result).toBeInstanceOf(DriverPresenter);
-    expect(result.result).toEqual(new DriverPresenter(driver));
+    expect(result.result).toEqual(driver);
   });
 
   it('should return null when no Driver is found', async () => {

@@ -6,15 +6,17 @@ export type PassengerDocument = HydratedDocument<Passenger>;
 
 @Schema({
   timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true },
+  toJSON: { getters: true, virtuals: true },
+  toObject: { getters: true, virtuals: true },
+  versionKey: false,
+  id: true,
 })
 export class Passenger implements PassengerEntity {
   @Prop()
   name: string;
 }
 
-export const PassengerSchema = SchemaFactory.createForClass(Passenger);
+const PassengerSchema = SchemaFactory.createForClass(Passenger);
 
 PassengerSchema.virtual('trips', {
   ref: 'Trip',
@@ -22,3 +24,5 @@ PassengerSchema.virtual('trips', {
   foreignField: 'passsenger',
   justOne: false,
 });
+
+export { PassengerSchema };

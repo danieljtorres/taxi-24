@@ -1,10 +1,8 @@
-import { Trip } from './trip.entity';
+import { BaseEntity } from './common.entity';
+import { Location, Trip } from './trip.entity';
 
-export interface Driver {
-  id?: string;
+export interface Driver extends BaseEntity {
   name: string;
-  actualLocation: number[];
+  actualLocation: Location;
   trips?: null | Trip[];
-  createdAt?: Date;
-  updatedAt?: Date;
 }

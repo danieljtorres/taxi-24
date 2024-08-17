@@ -7,7 +7,10 @@ export const makeDriversSeeds = (qty: number = 1): Driver[] =>
 export const makeDriverSeed = (): Driver => ({
   id: faker.database.mongodbObjectId().toString(),
   name: faker.person.fullName(),
-  actualLocation: [faker.location.latitude(), faker.location.longitude()],
+  actualLocation: {
+    latitude: faker.location.latitude(),
+    longitude: faker.location.longitude(),
+  },
   createdAt: new Date(),
   updatedAt: new Date(),
 });

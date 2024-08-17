@@ -1,11 +1,11 @@
 import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
-import { FindAvailables } from '@Application/userCases/driver';
+import { DriverFindAvailables } from '@Application/userCases/driver/findAvailables';
 import { DriverPresenter } from '@Domain/presenters/driver.presenter';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
 describe('Driver - FindAvailables', () => {
-  let findAvailablesUseCase: FindAvailables;
+  let findAvailablesUseCase: DriverFindAvailables;
   let mockDriverRepository: jest.Mocked<DriverRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
 
@@ -18,7 +18,7 @@ describe('Driver - FindAvailables', () => {
       info: jest.fn(),
     } as unknown as jest.Mocked<LoggerService>;
 
-    findAvailablesUseCase = new FindAvailables(
+    findAvailablesUseCase = new DriverFindAvailables(
       mockDriverRepository,
       mockLogger,
     );
