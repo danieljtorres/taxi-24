@@ -2,8 +2,7 @@ import { Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsString, ValidateNested } from 'class-validator';
 
 export enum NodeEnv {
-  Development = 'develop',
-  Local = 'localhost',
+  Development = 'development',
 }
 
 export enum LogLevel {
@@ -21,7 +20,7 @@ export class MongoEnv {
   host?: string = process.env.MONGO_DB_HOST || 'localhost:27017';
 
   @IsString()
-  database?: string = process.env.MONGO_DB_DATABASE;
+  database: string = process.env.MONGO_DB_DATABASE;
 
   @IsString()
   user?: string = process.env.MONGO_DB_USERNAME || '';

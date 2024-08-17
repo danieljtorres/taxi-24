@@ -1,73 +1,83 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Taxi 24
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+API de transporte que conecta pasajeros con conductores
+## Running locally
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+Clone el repositorio
 
 ```bash
-$ npm install
+  git clone git@github.com:danieljtorres/taxi-24.git
 ```
 
-## Running the app
+Vaya al directorio del proyecto
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+  cd taxi-24
 ```
 
-## Test
+Instale las dependencias
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+  npm install
 ```
 
-## Support
+Inicie el servidor
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+  npm run start
+```
 
-## Stay in touch
+## Environment Variables
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Para ejecutar este proyecto necesitara crear un archivo `.env.development` en el directorio `/envs` con las siguientes variables de entorno
 
-## License
+`MONGO_DB_DATABASE=nombre_base_datos`
 
-Nest is [MIT licensed](LICENSE).
+Para la conexion con mongo por default utiliza el host `localhost:27017` si necesita cambiar el host o su conexion necesita autenticacion puede configurar las siguientes variables
+
+`MONGO_DB_HOST`
+
+`MONGO_DB_USERNAME`
+
+`MONGO_DB_PASSWORD`
+
+Por default el puerto de la app es 3000 si necesita editarlo puede configurar la siguiente variable
+
+`PORT`
+## Seed Database
+
+El proyecto puede inyectar registros de prueba a la base de datos, para inyectar los registros ejecute el siguiente comando
+
+```bash
+  npm run command-nest seed-data
+```
+
+Esto inyectara: 
+
+- 12 registros de conductores con diferentes geolocalizaciones
+- 4 registros de pasajeros
+
+Para crear y administrar viajes, asi como ver los conductores cercanos, dejo preparado una listas de posibles casos de latitud y longitud
+
+```bash
+  [ latitud, longitud ]
+  [-34.56547727533884, -58.45284494050236]
+  [-34.588425931575536, -58.42525880864136]
+  [-34.617434630315884, -58.433161814803555]
+  [-34.57364937950123, -58.50598479980289]
+```
+
+Esto le permitira probar diferentes casos
+## API Reference
+
+Una vez el servidor este ejecutandose podra ingresar a una documentacion de swagger lista para usar y probar los diferentes metodos de la API
+
+Link: [Swagger API Reference](http://localhost:3000/docs)
+## Running Tests
+
+Para correr los test ejecute el siguiente comando
+
+```bash
+  npm run test
+```
