@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule as MongooseModuleLib } from '@nestjs/mongoose';
-import { EnvService } from '@Infrastructure/env/env.service';
-import { CONFIG_PROVIDER } from '@Infrastructure/env';
+import { EnvService } from '@Infrastructure/nestjs/env/env.service';
+import { CONFIG_PROVIDER } from '@Infrastructure/nestjs/env';
 import { createMongooseOptions } from './config';
 
 //Schemas

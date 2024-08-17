@@ -5,9 +5,7 @@ import { DriverRepository } from '@Application/repositories/driver.repository';
 import { Driver } from '../schemas/driver.schema';
 import { BaseMongooseRepository } from './base.repository';
 import { TripStatus } from '@Domain/entities/trip.entity';
-import { getMongoSkip } from '@Utils/pagination';
-import { Pagination, SortEnum } from '@Domain/entities/common.entity';
-import * as geolib from 'geolib';
+import { getDistance } from '@Utils/geo';
 import { MAX_DISTANCE_KM } from '@Utils/constants';
 
 @Injectable()
@@ -23,14 +21,7 @@ export class MongooseDriverRepository
     return await this.driverModel.findById(id);
   }
 
-  async findAvailables(
-    pagination: Pagination,
-    totalPages: number,
-  ): Promise<Driver[]> {
-    const { page, limit, sort } = pagination;
-
-    const skip = getMongoSkip(page, limit, totalPages);
-
+  async findAvailables(): Promise<Driver[]> {
     const aggregation: PipelineStage[] = [
       {
         $lookup: {
@@ -51,13 +42,6 @@ export class MongooseDriverRepository
       },
       {
         $match: { trips: { $gt: { $size: 0 } } },
-      },
-      { $sort: { name: sort == SortEnum.DESC ? -1 : 1 } },
-      {
-        $skip: skip,
-      },
-      {
-        $limit: limit,
       },
       {
         $project: {
@@ -97,18 +81,16 @@ export class MongooseDriverRepository
 
     const drivers = await this.driverModel.aggregate(aggregation);
 
-    const filteredDrivers = drivers.filter(({ actualLocation }) => {
-      const [latitude, longitude] = location;
-      const [alLatitude, alLongitude] = actualLocation;
-
-      const distanceInKm =
-        geolib.getDistance(
-          { latitude, longitude },
-          { latitude: alLatitude, longitude: alLongitude },
-        ) / 1000;
-
-      return distanceInKm <= MAX_DISTANCE_KM;
-    });
+    const filteredDrivers = drivers
+      .filter(
+        ({ actualLocation }) =>
+          getDistance(actualLocation, location) <= MAX_DISTANCE_KM,
+      )
+      .sort(
+        (a, b) =>
+          getDistance(a.actualLocation, location) -
+          getDistance(b.actualLocation, location),
+      );
 
     return filteredDrivers.map((doc) => this.model.hydrate(doc));
   }

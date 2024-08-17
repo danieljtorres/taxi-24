@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { NestExceptionsService } from './exception.service';
-import { ExceptionService } from '@Application/providers/exception';
+import { ExceptionService } from '@Application/providers/exception.service';
 
 @Module({
   providers: [

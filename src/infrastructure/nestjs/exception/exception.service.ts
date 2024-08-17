@@ -1,7 +1,7 @@
 import {
   ExceptionService,
   IFormatExceptionMessage,
-} from '@Application/providers/exception';
+} from '@Application/providers/exception.service';
 import {
   BadRequestException,
   ForbiddenException,

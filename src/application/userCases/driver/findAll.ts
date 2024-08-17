@@ -1,8 +1,8 @@
 import { DriverRepository } from '@Application/repositories/driver.repository';
-import { LoggerService } from '@Application/providers/logger';
 import { calculatedPages } from '@Utils/pagination';
 import { Pagination, PaginationResult } from '@Domain/entities/common.entity';
 import { DriverPresenter } from '@Domain/presenters/driver.presenter';
+import { LoggerService } from '@Application/providers/logger.service';
 
 export class FindAll {
   constructor(
