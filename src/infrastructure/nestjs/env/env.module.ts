@@ -28,10 +28,7 @@ export class EnvModule {
       return validatedConfig;
     };
 
-    const envFilePath = [
-      `./envs/.env.${process.env.NODE_ENV}`,
-      `./envs/.env.example`,
-    ];
+    const envFilePath = [`envs/.env.${process.env.NODE_ENV}`];
 
     return {
       module: EnvModule,
@@ -39,7 +36,6 @@ export class EnvModule {
         NestConfigModule.forRoot({
           envFilePath,
           validate,
-          cache: true,
         }),
       ],
       providers: [

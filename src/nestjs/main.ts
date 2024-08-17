@@ -10,6 +10,8 @@ async function bootstrap() {
     rawBody: true,
   });
 
+  app.setGlobalPrefix('api');
+
   const env = new Enviroment();
   const port = env.port;
 
@@ -35,7 +37,7 @@ async function bootstrap() {
     .addServer(getSwaggerServerUrl())
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(port);
 }
