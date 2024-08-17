@@ -21,7 +21,11 @@ export class DriverFindAll {
 
     const totalPages = calculatedPages(count, limit);
 
-    const drivers = await this.driverRepository.findAll(pagination, totalPages);
+    const drivers = await this.driverRepository.findAll(
+      {},
+      pagination,
+      totalPages,
+    );
 
     return {
       result: drivers,

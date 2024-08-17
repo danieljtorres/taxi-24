@@ -13,4 +13,8 @@ export class MongooseInvoiceRepository
   constructor(@InjectModel(Invoice.name) private invoiceModel: Model<Invoice>) {
     super(invoiceModel);
   }
+
+  async create(data: any): Promise<Invoice> {
+    return this.invoiceModel.create(data);
+  }
 }

@@ -2,10 +2,10 @@ import { LoggerService } from '@Application/providers/logger.service';
 import { PassengerRepository } from '@Application/repositories/passenger.repository';
 import { PassengerFindAll } from '@Application/userCases/passenger/findAll';
 import { SortEnum } from '@Domain/entities/common.entity';
-import { PassengerPresenter } from '@Domain/presenters/passanger.presenter';
+import { Passenger } from '@Domain/entities/passenger.entity';
 import { makePassengersSeeds } from 'test/seeds/passenger';
 
-describe('Passenger - FindAll', () => {
+describe('PassengerFindAll', () => {
   let findAllUseCase: PassengerFindAll;
   let mockPassengerRepository: jest.Mocked<PassengerRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
@@ -23,7 +23,7 @@ describe('Passenger - FindAll', () => {
     findAllUseCase = new PassengerFindAll(mockPassengerRepository, mockLogger);
   });
 
-  it('should return an paginate object with Passengers found', async () => {
+  it('should return an paginate object with passengers found', async () => {
     const passengers = makePassengersSeeds(2);
     const count = 10;
 
@@ -42,11 +42,11 @@ describe('Passenger - FindAll', () => {
 
     expect(mockPassengerRepository.count).toHaveBeenCalled();
     expect(mockPassengerRepository.findAll).toHaveBeenCalledWith(
+      {},
       pagination,
       totalPages,
     );
-    expect(result.result).toBeInstanceOf(Array<PassengerPresenter>);
-    expect(result.result[0]).toBeInstanceOf(PassengerPresenter);
+    expect(result.result).toBeInstanceOf(Array<Passenger>);
     expect(result.totalPages).toBe(totalPages);
     expect(result.totalItems).toBe(count);
   });

@@ -1,11 +1,11 @@
 import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
 import { DriverFindAvailablesNearby } from '@Application/userCases/driver/findAvailablesNearby';
-import { DriverPresenter } from '@Domain/presenters/driver.presenter';
+import { Driver } from '@Domain/entities/driver.entity';
 import { faker } from '@faker-js/faker';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
-describe('Driver - FindAvailablesNearby', () => {
+describe('DriverFindAvailablesNearby', () => {
   let findAvailablesNearbyUseCase: DriverFindAvailablesNearby;
   let mockDriverRepository: jest.Mocked<DriverRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
@@ -25,7 +25,7 @@ describe('Driver - FindAvailablesNearby', () => {
     );
   });
 
-  it('should return an object with Drivers found', async () => {
+  it('should return an object with drivers found', async () => {
     const drivers = makeDriversSeeds(2);
 
     const location = {
@@ -40,7 +40,6 @@ describe('Driver - FindAvailablesNearby', () => {
     expect(mockDriverRepository.findAvailablesNearby).toHaveBeenCalledWith(
       location,
     );
-    expect(result.result).toBeInstanceOf(Array<DriverPresenter>);
-    expect(result.result[0]).toBeInstanceOf(DriverPresenter);
+    expect(result.result).toBeInstanceOf(Array<Driver>);
   });
 });

@@ -6,6 +6,7 @@ import { Passenger } from '../schemas/passenger.schema';
 import { faker } from '@faker-js/faker';
 import { Trip } from '../schemas/trip.schema';
 import { LoggerService } from '@Application/providers/logger.service';
+import { Invoice } from '../schemas/invoice.schema';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const tripLocations = [
@@ -41,6 +42,7 @@ export class SeedsCommand extends CommandRunner {
     @InjectModel(Driver.name) private driverModel: Model<Driver>,
     @InjectModel(Passenger.name) private passengerModel: Model<Passenger>,
     @InjectModel(Trip.name) private tripModel: Model<Trip>,
+    @InjectModel(Invoice.name) private invoiceModel: Model<Invoice>,
     private readonly logger: LoggerService,
   ) {
     super();
@@ -50,45 +52,57 @@ export class SeedsCommand extends CommandRunner {
     this.logger.info('Start command seed-data');
 
     try {
+      await this.invoiceModel.deleteMany({});
+      this.logger.info(`invoices deleted from collection`);
+
+      await this.tripModel.deleteMany({});
+      this.logger.info(`trips deleted from collection`);
+
       //Faker data
-      const seedDrivers = [...Array(10).keys()].map(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        (i): Driver => ({
+      const seedDrivers = driversLocations.map(
+        ([latitude, longitude]): Driver => ({
           name: faker.person.fullName(),
           actualLocation: {
-            latitude: faker.location.latitude(),
-            longitude: faker.location.longitude(),
+            latitude,
+            longitude,
           },
         }),
       );
-      const driversCreated = await this.seedData(this.driverModel, seedDrivers);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const driversCreated = await this.seedData(
+        'drivers',
+        this.driverModel,
+        seedDrivers,
+      );
 
       //Faker data
-      const seedPassengers = [...Array(10).keys()].map(
+      const seedPassengers = [...Array(4).keys()].map(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (i): Passenger => ({
           name: faker.person.fullName(),
         }),
       );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const passengersCreated = await this.seedData(
+        'passengers',
         this.passengerModel,
         seedPassengers,
       );
 
-      await this.seedData(this.tripModel, [
-        {
-          origin: {
-            latitude: faker.location.latitude(),
-            longitude: faker.location.longitude(),
-          },
-          destination: {
-            latitude: faker.location.latitude(),
-            longitude: faker.location.longitude(),
-          },
-          passenger: passengersCreated[0]._id,
-          driver: driversCreated[0]._id,
-        },
-      ] as Trip[]);
+      // await this.seedData(this.tripModel, [
+      //   {
+      //     origin: {
+      //       latitude: faker.location.latitude(),
+      //       longitude: faker.location.longitude(),
+      //     },
+      //     destination: {
+      //       latitude: faker.location.latitude(),
+      //       longitude: faker.location.longitude(),
+      //     },
+      //     passenger: passengersCreated[0]._id,
+      //     driver: driversCreated[0]._id,
+      //   },
+      // ] as Trip[]);
     } catch (error) {
       this.logger.info(error);
     }
@@ -96,18 +110,18 @@ export class SeedsCommand extends CommandRunner {
     this.logger.info('End command seed-data');
   }
 
-  private async seedData(model, data) {
+  private async seedData(modelName, model, data) {
     const count = await model.countDocuments({});
 
     if (count > 0) {
       await model.deleteMany({});
-      this.logger.info(`${count} ${model.name} deleted from collection`);
+      this.logger.info(`${count} ${modelName} deleted from collection`);
     }
 
     const created = await model.insertMany(data);
 
     this.logger.info(
-      `${created.length} ${model.name} inserted to the collection`,
+      `${created.length} ${modelName} inserted to the collection`,
     );
 
     return created;

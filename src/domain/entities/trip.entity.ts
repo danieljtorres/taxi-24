@@ -5,7 +5,7 @@ import { Passenger } from './passenger.entity';
 
 export enum TripStatus {
   'REQUESTED' = 1,
-  'ASSIGNED' = 2,
+  'ACCEPT' = 2,
   'COMPLETED' = 3,
 }
 

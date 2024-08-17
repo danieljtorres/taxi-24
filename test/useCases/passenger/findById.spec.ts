@@ -1,10 +1,9 @@
 import { PassengerFindById } from '@Application/userCases/passenger/findById';
 import { LoggerService } from '@Application/providers/logger.service';
 import { PassengerRepository } from '@Application/repositories/passenger.repository';
-import { PassengerPresenter } from '@Domain/presenters/passanger.presenter';
 import { makePassengerSeed } from 'test/seeds/passenger';
 
-describe('FindById', () => {
+describe('PassengerFindById', () => {
   let findById: PassengerFindById;
   let mockPassengerRepository: jest.Mocked<PassengerRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
@@ -21,18 +20,17 @@ describe('FindById', () => {
     findById = new PassengerFindById(mockPassengerRepository, mockLogger);
   });
 
-  it('should return an object with a Passenger found', async () => {
+  it('should return an object with a passenger found', async () => {
     const passenger = makePassengerSeed();
     mockPassengerRepository.findById.mockResolvedValue(passenger);
 
     const result = await findById.execute(passenger.id);
 
     expect(mockPassengerRepository.findById).toHaveBeenCalledWith(passenger.id);
-    expect(result.result).toBeInstanceOf(PassengerPresenter);
-    expect(result.result).toEqual(new PassengerPresenter(passenger));
+    expect(result.result).toEqual(passenger);
   });
 
-  it('should return null when no Passenger is found', async () => {
+  it('should return null when no passenger is found', async () => {
     mockPassengerRepository.findById.mockResolvedValue(null);
 
     const result = await findById.execute('123');

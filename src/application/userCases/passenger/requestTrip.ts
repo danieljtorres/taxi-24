@@ -29,7 +29,7 @@ export class PassengerRequestTrip {
     //Check if passanger has any requested or active trips
     const activeTrips = await this.tripRepository.findByPassenger(id, [
       TripStatus.REQUESTED,
-      TripStatus.ASSIGNED,
+      TripStatus.ACCEPT,
     ]);
 
     if (activeTrips.length)
