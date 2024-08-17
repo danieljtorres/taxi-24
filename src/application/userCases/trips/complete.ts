@@ -4,6 +4,8 @@ import { DriverRepository } from '@Application/repositories/driver.repository';
 import { TripRepository } from '@Application/repositories/trip.repository';
 import { Result } from '@Domain/entities/common.entity';
 import { Trip, TripStatus } from '@Domain/entities/trip.entity';
+// import { RATE_PER_KM } from '@Utils/constants';
+// import { getDistance } from '@Utils/geo';
 import { tripStatusToLabel } from '@Utils/tripStatus';
 
 export class TripComplete {
@@ -47,6 +49,16 @@ export class TripComplete {
 
     // Create the trip
     const tripAccepted = await this.tripRepository.complete(id);
+
+    //Create Invoice for trip
+    // const amount = Math.ceil(
+    //   getDistance(trip.origin, trip.destination) * RATE_PER_KM,
+    // );
+
+    // const invoice = await this.invoiceRepository.create({
+    //   amount,
+    //   trip: trip.id,
+    // });
 
     return {
       result: tripAccepted,
