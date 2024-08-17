@@ -11,7 +11,11 @@ export abstract class BaseMongooseRepository<T> implements IBaseRepository<T> {
   }
 
   async count(query: Record<string, any> = {}): Promise<number> {
-    return await this.model.countDocuments(query);
+    return this.model.countDocuments(query);
+  }
+
+  async findById(id: string): Promise<T> {
+    return this.model.findById(id);
   }
 
   async findAll(pagination: Pagination, totalPages: number): Promise<T[]> {

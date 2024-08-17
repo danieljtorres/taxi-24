@@ -1,9 +1,10 @@
 import * as geolib from 'geolib';
 import { KM_DIVISOR } from './constants';
+import { Location } from '@Domain/entities/trip.entity';
 
-export const getDistance = (pointOne: number[], pointTwo: number[]): number => {
-  const [latitude, longitude] = pointOne;
-  const [alLatitude, alLongitude] = pointTwo;
+export const getDistance = (pointOne: Location, pointTwo: Location): number => {
+  const { latitude, longitude } = pointOne;
+  const { latitude: alLatitude, longitude: alLongitude } = pointTwo;
 
   const distanceInKm =
     geolib.getDistance(

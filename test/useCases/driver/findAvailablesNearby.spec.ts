@@ -1,12 +1,12 @@
 import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
-import { FindAvailablesNearby } from '@Application/userCases/driver';
+import { DriverFindAvailablesNearby } from '@Application/userCases/driver/findAvailablesNearby';
 import { DriverPresenter } from '@Domain/presenters/driver.presenter';
 import { faker } from '@faker-js/faker';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
 describe('Driver - FindAvailablesNearby', () => {
-  let findAvailablesNearbyUseCase: FindAvailablesNearby;
+  let findAvailablesNearbyUseCase: DriverFindAvailablesNearby;
   let mockDriverRepository: jest.Mocked<DriverRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
 
@@ -19,7 +19,7 @@ describe('Driver - FindAvailablesNearby', () => {
       info: jest.fn(),
     } as unknown as jest.Mocked<LoggerService>;
 
-    findAvailablesNearbyUseCase = new FindAvailablesNearby(
+    findAvailablesNearbyUseCase = new DriverFindAvailablesNearby(
       mockDriverRepository,
       mockLogger,
     );
@@ -28,7 +28,10 @@ describe('Driver - FindAvailablesNearby', () => {
   it('should return an object with Drivers found', async () => {
     const drivers = makeDriversSeeds(2);
 
-    const location = [faker.location.latitude(), faker.location.longitude()];
+    const location = {
+      latitude: faker.location.latitude(),
+      longitude: faker.location.longitude(),
+    };
 
     mockDriverRepository.findAvailablesNearby.mockResolvedValue(drivers);
 

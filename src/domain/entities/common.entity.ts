@@ -19,3 +19,9 @@ export interface PaginationResult<TData> {
 export interface Result<TData> {
   result: TData;
 }
+
+export interface BaseEntity {
+  id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

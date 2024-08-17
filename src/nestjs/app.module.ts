@@ -3,7 +3,7 @@ import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { DatabaseModule } from '@Infrastructure/nestjs/databases/database.module';
 import { EnvModule } from '@Infrastructure/nestjs/env/env.module';
 import { LoggerModule } from '@Infrastructure/nestjs/logger/logger.module';
-import { ControllersModule } from '@Presentation/nestjs/controllers.module';
+import { ControllersModule } from 'src/nestjs/controllers.module';
 import { ExceptionsModule } from '@Infrastructure/nestjs/exception/exception.module';
 
 @Module({

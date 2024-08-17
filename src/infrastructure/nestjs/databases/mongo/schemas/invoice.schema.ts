@@ -11,6 +11,10 @@ export type InvoiceDocument = HydratedDocument<Invoice>;
 
 @Schema({
   timestamps: true,
+  toJSON: { getters: true, virtuals: true },
+  toObject: { getters: true, virtuals: true },
+  versionKey: false,
+  id: true,
 })
 export class Invoice implements InvoiceEntity {
   @Prop()
@@ -24,4 +28,6 @@ export class Invoice implements InvoiceEntity {
   trip: Trip;
 }
 
-export const InvoiceSchema = SchemaFactory.createForClass(Invoice);
+const InvoiceSchema = SchemaFactory.createForClass(Invoice);
+
+export { InvoiceSchema };

@@ -1,12 +1,12 @@
 import { LoggerService } from '@Application/providers/logger.service';
 import { DriverRepository } from '@Application/repositories/driver.repository';
-import { FindAll } from '@Application/userCases/driver/findAll';
+import { DriverFindAll } from '@Application/userCases/driver/findAll';
 import { SortEnum } from '@Domain/entities/common.entity';
 import { DriverPresenter } from '@Domain/presenters/driver.presenter';
 import { makeDriversSeeds } from 'test/seeds/driver';
 
 describe('Driver - FindAll', () => {
-  let findAllUseCase: FindAll;
+  let findAllUseCase: DriverFindAll;
   let mockDriverRepository: jest.Mocked<DriverRepository>;
   let mockLogger: jest.Mocked<LoggerService>;
 
@@ -20,7 +20,7 @@ describe('Driver - FindAll', () => {
       info: jest.fn(),
     } as unknown as jest.Mocked<LoggerService>;
 
-    findAllUseCase = new FindAll(mockDriverRepository, mockLogger);
+    findAllUseCase = new DriverFindAll(mockDriverRepository, mockLogger);
   });
 
   it('should return an paginate object with Drivers found', async () => {

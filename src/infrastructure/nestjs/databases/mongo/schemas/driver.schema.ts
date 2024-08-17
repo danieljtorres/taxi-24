@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { Driver as DriverEntity } from '@Domain/entities/driver.entity';
 import { Type } from 'class-transformer';
-import { Trip } from './trip.schema';
+import { Location, Trip } from './trip.schema';
 
 export type DriverDocument = HydratedDocument<Driver>;
 
@@ -10,6 +10,8 @@ export type DriverDocument = HydratedDocument<Driver>;
   timestamps: true,
   toJSON: { getters: true, virtuals: true },
   toObject: { getters: true, virtuals: true },
+  versionKey: false,
+  id: true,
 })
 export class Driver implements DriverEntity {
   _id?: string;
@@ -17,8 +19,8 @@ export class Driver implements DriverEntity {
   @Prop()
   name: string;
 
-  @Prop({ default: [0, 0] })
-  actualLocation: number[];
+  @Prop({ type: Object })
+  actualLocation: Location;
 
   @Type(() => Trip)
   trips?: Trip[];

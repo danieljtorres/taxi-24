@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { DriverRepository } from '@Application/repositories/driver.repository';
 import { Driver } from '../schemas/driver.schema';
 import { BaseMongooseRepository } from './base.repository';
-import { TripStatus } from '@Domain/entities/trip.entity';
+import { Location, TripStatus } from '@Domain/entities/trip.entity';
 import { getDistance } from '@Utils/geo';
 import { MAX_DISTANCE_KM } from '@Utils/constants';
 
@@ -15,10 +15,6 @@ export class MongooseDriverRepository
 {
   constructor(@InjectModel(Driver.name) private driverModel: Model<Driver>) {
     super(driverModel);
-  }
-
-  async findById(id: string): Promise<Driver> {
-    return await this.driverModel.findById(id);
   }
 
   async findAvailables(): Promise<Driver[]> {
@@ -32,7 +28,7 @@ export class MongooseDriverRepository
             {
               $match: {
                 $expr: {
-                  $in: ['$status', [TripStatus.ASSIGNED, TripStatus.ONGOING]],
+                  $in: ['$status', [TripStatus.ASSIGNED]],
                 },
               },
             },
@@ -55,7 +51,10 @@ export class MongooseDriverRepository
     );
   }
 
-  async findAvailablesNearby(location: number[]): Promise<Driver[]> {
+  async findAvailablesNearby(
+    location: Location,
+    limit?: number,
+  ): Promise<Driver[]> {
     const aggregation: PipelineStage[] = [
       {
         $lookup: {
@@ -66,7 +65,7 @@ export class MongooseDriverRepository
             {
               $match: {
                 $expr: {
-                  $in: ['$status', [TripStatus.ASSIGNED, TripStatus.ONGOING]],
+                  $in: ['$status', [TripStatus.ASSIGNED]],
                 },
               },
             },
@@ -83,15 +82,18 @@ export class MongooseDriverRepository
 
     const filteredDrivers = drivers
       .filter(
-        ({ actualLocation }) =>
+        ({ actualLocation }: Driver) =>
           getDistance(actualLocation, location) <= MAX_DISTANCE_KM,
       )
       .sort(
         (a, b) =>
           getDistance(a.actualLocation, location) -
           getDistance(b.actualLocation, location),
-      );
+      )
+      .map((doc) => this.model.hydrate(doc));
 
-    return filteredDrivers.map((doc) => this.model.hydrate(doc));
+    if (limit) return filteredDrivers.slice(0, limit);
+
+    return filteredDrivers;
   }
 }

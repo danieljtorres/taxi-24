@@ -13,6 +13,10 @@ import { Passenger, PassengerSchema } from './schemas/passenger.schema';
 import { SeedsCommand } from './seeds';
 import { DriverRepository } from '@Application/repositories/driver.repository';
 import { MongooseDriverRepository } from './repositories/driver.repository';
+import { PassengerRepository } from '@Application/repositories/passenger.repository';
+import { MongoosePassengerRepository } from './repositories/passenger.repository';
+import { TripRepository } from '@Application/repositories/trip.repository';
+import { MongooseTripRepository } from './repositories/trip.repository';
 
 @Module({
   imports: [
@@ -34,8 +38,21 @@ import { MongooseDriverRepository } from './repositories/driver.repository';
       provide: DriverRepository,
       useClass: MongooseDriverRepository,
     },
+    {
+      provide: PassengerRepository,
+      useClass: MongoosePassengerRepository,
+    },
+    {
+      provide: TripRepository,
+      useClass: MongooseTripRepository,
+    },
     SeedsCommand,
   ],
-  exports: [DriverRepository, SeedsCommand],
+  exports: [
+    DriverRepository,
+    PassengerRepository,
+    TripRepository,
+    SeedsCommand,
+  ],
 })
 export class MongooseModule {}
