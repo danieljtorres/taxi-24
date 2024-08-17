@@ -4,7 +4,6 @@ import { Type } from 'class-transformer';
 import { Trip as TripEntity, TripStatus } from '@Domain/entities/trip.entity';
 import { Passenger } from './passenger.schema';
 import { Driver } from './driver.schema';
-import { Point } from './point.schema';
 
 export type TripDocument = HydratedDocument<Trip>;
 
@@ -14,11 +13,11 @@ export type TripDocument = HydratedDocument<Trip>;
   toObject: { virtuals: true },
 })
 export class Trip implements TripEntity {
-  @Prop()
-  origin: Point;
+  @Prop({ default: [0, 0] })
+  origin: number[];
 
-  @Prop()
-  destination: Point;
+  @Prop({ default: [0, 0] })
+  destination: number[];
 
   @Prop({ default: TripStatus.REQUESTED })
   status: TripStatus;

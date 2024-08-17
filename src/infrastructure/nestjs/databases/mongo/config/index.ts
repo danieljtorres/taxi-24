@@ -1,4 +1,4 @@
-import { MongoEnv } from '@Infrastructure/env';
+import { MongoEnv } from '@Infrastructure/nestjs/env';
 import { MongooseModuleOptions } from '@nestjs/mongoose';
 
 export const createMongooseOptions = (

@@ -1,8 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import * as driverUseCases from '@Application/userCases/driver';
 import { DriverRepository } from '@Application/repositories/driver.repository';
-import { LoggerService } from '@Application/providers/logger';
-import { ExceptionService } from '@Application/providers/exception';
+import { LoggerService } from '@Application/providers/logger.service';
 
 @Module({
   providers: [...Object.values(driverUseCases)],
@@ -47,10 +46,8 @@ export class DriversUseCasesModule {
           provide: DriversUseCasesModule.FIND_BY_ID_USECASE,
           useFactory: (
             driverRepository: DriverRepository,
-            exceptions: ExceptionService,
             logger: LoggerService,
-          ) =>
-            new driverUseCases.FindById(driverRepository, exceptions, logger),
+          ) => new driverUseCases.FindById(driverRepository, logger),
         },
       ],
       exports: [
