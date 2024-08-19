@@ -73,7 +73,7 @@ Esto le permitira probar diferentes casos
 
 Una vez el servidor este ejecutandose podra ingresar a una documentacion de swagger lista para usar y probar los diferentes metodos de la API
 
-Link: [Swagger API Reference](http://localhost:3000/docs)
+Link: [Swagger API Reference](http://localhost:3000/docs) (http://locahost:PORT/docs)
 ## Running Tests
 
 Para correr los test ejecute el siguiente comando
