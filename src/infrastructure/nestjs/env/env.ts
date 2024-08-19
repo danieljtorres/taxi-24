@@ -36,7 +36,7 @@ export class Enviroment {
   env = process.env.NODE_ENV as NodeEnv;
 
   @IsNumber()
-  port = process.env.PORT || 3000;
+  port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
   @IsEnum(LogLevel)
   logLevel: string = process.env.LOG_LEVEL || 'info';
