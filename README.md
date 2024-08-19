@@ -25,7 +25,7 @@ Instale las dependencias
 Inicie el servidor
 
 ```bash
-  npm run start
+  npm run start:dev
 ```
 
 ## Environment Variables
